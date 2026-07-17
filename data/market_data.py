@@ -20,7 +20,8 @@ def get_market_data():
             price = data.history(period="1d")["Close"].iloc[-1]
             market[name] = price
 
-        except Exception:
+        except Exception as e:
+            print(f"Market data error for {name} ({symbol}): {e}")
             market[name] = None
 
     return market
