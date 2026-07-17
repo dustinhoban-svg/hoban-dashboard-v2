@@ -1,0 +1,10 @@
+0000000000000000000000000000000000000000 9cc1ac6ea822620b29f4eb82626b8efeba30a38c Dustin Hoban <dustinhoban@gmail.com> 1784235263 -0500	commit (initial): Hoban Financial Terminal v0.1 initial dashboard
+9cc1ac6ea822620b29f4eb82626b8efeba30a38c 12dff8d497bf9a078ed60f62afcd625a34af31a4 Dustin Hoban <dustinhoban@gmail.com> 1784236257 -0500	commit: Hoban Financial Terminal v0.2 market pulse dashboard
+12dff8d497bf9a078ed60f62afcd625a34af31a4 5bae001db3318ccf180c37b70eb43bc42955480e Dustin Hoban <dustinhoban@gmail.com> 1784237346 -0500	commit: Hoban Financial Terminal v0.3 dashboard structure update
+5bae001db3318ccf180c37b70eb43bc42955480e 51dc5eb20627b79164292509c9434c6be322b3f7 Dustin Hoban <dustinhoban@gmail.com> 1784237422 -0500	commit: Add market data module
+51dc5eb20627b79164292509c9434c6be322b3f7 0c47f704d53d889a94d6eade54dd3f0799348531 Dustin Hoban <dustinhoban@gmail.com> 1784249980 -0500	commit: Add macro environment panel to dashboard
+0c47f704d53d889a94d6eade54dd3f0799348531 5ba98033707a20c9a741bbb46f38ef5450e32f91 Dustin Hoban <dustinhoban@gmail.com> 1784250816 -0500	commit: Add interpretation layer for liquidity and curve
+5ba98033707a20c9a741bbb46f38ef5450e32f91 d810f69e6df8715e6db182ee8a30bd5b26bde70b Dustin Hoban <dustinhoban@gmail.com> 1784254847 -0500	commit: Add credit, inflation, and labor indicators
+d810f69e6df8715e6db182ee8a30bd5b26bde70b 59354eb4d3283d44fd23fe652f0f57171200fb7f Dustin Hoban <dustinhoban@gmail.com> 1784258182 -0500	commit: Add historical trend charts with date range picker
+59354eb4d3283d44fd23fe652f0f57171200fb7f e0b2b6e170b8497f8e42cf4be6d5acce9470f9ea Dustin Hoban <dustinhoban@gmail.com> 1784258741 -0500	commit: Add SQLite daily snapshot saving and history table
+e0b2b6e170b8497f8e42cf4be6d5acce9470f9ea e477b750fe5f13dc6ca953b05deb708f9a131287 Dustin Hoban <dustinhoban@gmail.com> 1784259199 -0500	commit: Reorganize dashboard into tabs with sidebar controls

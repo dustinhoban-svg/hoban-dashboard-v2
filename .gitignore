@@ -1,0 +1,5 @@
+config/settings.py
+snapshots.db
+.venv/
+__pycache__/
+*.pyc
