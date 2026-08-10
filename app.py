@@ -76,8 +76,8 @@ date_range = st.sidebar.date_input(
 )
 
 # --- Tabs ---
-tab_overview, tab_macro, tab_real, tab_trends, tab_history = st.tabs(
-    ["Overview", "Macro Detail", "Real Rates", "Trends", "Snapshot History"]
+tab_overview, tab_macro, tab_real, tab_credit, tab_trends, tab_history = st.tabs(
+    ["Overview", "Macro Detail", "Real Rates", "Credit Stress", "Trends", "Snapshot History"]
 )
 
 with tab_overview:
@@ -201,6 +201,45 @@ with tab_real:
         st.caption("A steep real curve prices stronger long-run growth expectations net of inflation; a flat/inverted real curve suggests the market sees weaker growth ahead.")
     else:
         st.write("Insufficient data for real curve slope")
+
+with tab_credit:
+    st.subheader("Credit Stress")
+
+    ccc_spread = fred_data.get("CCC Credit Spread")
+    move_idx = market.get("MOVE Index")
+    hyg = market.get("HYG")
+    jnk = market.get("JNK")
+    vvix = market.get("VVIX")
+    mstr = market.get("MSTR")
+    dxy = market.get("Dollar Index")
+    btc = market.get("Bitcoin")
+
+    st.markdown("**Credit Spreads**")
+    ccol1, ccol2 = st.columns(2)
+    ccol1.metric("HY OAS (Overall Junk)", f"{hy_spread:.2f}%" if hy_spread else "N/A")
+    ccol2.metric("CCC Spread (Distressed)", f"{ccc_spread:.2f}%" if ccc_spread else "N/A")
+    st.caption("Widening CCC spreads while Bitcoin treasury companies carry leverage is the key stress signal to watch.")
+
+    st.divider()
+    st.markdown("**Bond & Equity Volatility**")
+    vcol1, vcol2, vcol3 = st.columns(3)
+    vcol1.metric("MOVE Index", f"{move_idx:.1f}" if move_idx else "N/A")
+    vcol2.metric("VIX", f"{vix:.1f}" if vix else "N/A")
+    vcol3.metric("VVIX", f"{vvix:.1f}" if vvix else "N/A")
+
+    st.divider()
+    st.markdown("**High Yield ETFs & Dollar**")
+    hcol1, hcol2, hcol3 = st.columns(3)
+    hcol1.metric("HYG", f"${hyg:.2f}" if hyg else "N/A")
+    hcol2.metric("JNK", f"${jnk:.2f}" if jnk else "N/A")
+    hcol3.metric("DXY", f"{dxy:.2f}" if dxy else "N/A")
+
+    st.divider()
+    st.markdown("**Bitcoin & Bitcoin Treasury Proxy**")
+    bcol1, bcol2 = st.columns(2)
+    bcol1.metric("Bitcoin (BTC)", f"${btc:,.0f}" if btc else "N/A")
+    bcol2.metric("MSTR", f"${mstr:.2f}" if mstr else "N/A")
+    st.caption("Watch for divergence: if MSTR falls sharply while BTC holds up, or if HYG/CCC spreads deteriorate while BTC makes new highs, that's a credit-driven warning sign rather than a pure crypto move.")
 
 with tab_history:
     st.subheader("Snapshot History")

@@ -25,7 +25,8 @@ def get_fred_data():
         "10Y Real Rate": "DFII10",
         "20Y Real Rate": "DFII20",
         "30Y Real Rate": "DFII30",
-        "5Y Breakeven Inflation": "T5YIE"    
+        "5Y Breakeven Inflation": "T5YIE",
+        "CCC Credit Spread": "BAMLH0A3HYC"    
 }
     for name, series in indicators.items():
         try:

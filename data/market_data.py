@@ -9,7 +9,12 @@ def get_market_data():
         "Bitcoin": "BTC-USD",
         "VIX": "^VIX",
         "10-Year Yield": "^TNX",
-        "Dollar Index": "DX-Y.NYB"
+        "Dollar Index": "DX-Y.NYB",
+        "MOVE Index": "^MOVE",
+        "HYG": "HYG",
+        "JNK": "JNK",
+        "VVIX": "^VVIX",
+        "MSTR": "MSTR"
     }
 
     market = {}
