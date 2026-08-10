@@ -76,8 +76,8 @@ date_range = st.sidebar.date_input(
 )
 
 # --- Tabs ---
-tab_overview, tab_macro, tab_trends, tab_history = st.tabs(
-    ["Overview", "Macro Detail", "Trends", "Snapshot History"]
+tab_overview, tab_macro, tab_real, tab_trends, tab_history = st.tabs(
+    ["Overview", "Macro Detail", "Real Rates", "Trends", "Snapshot History"]
 )
 
 with tab_overview:
@@ -158,6 +158,49 @@ with tab_trends:
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.write("No data available for this range.")
+
+with tab_real:
+    st.subheader("Real Rates")
+
+    real_5y = fred_data.get("5Y Real Rate")
+    real_10y = fred_data.get("10Y Real Rate")
+    real_20y = fred_data.get("20Y Real Rate")
+    real_30y = fred_data.get("30Y Real Rate")
+    breakeven_5y = fred_data.get("5Y Breakeven Inflation")
+    breakeven_10y = fred_data.get("10Y Breakeven Inflation")
+
+    st.markdown("**Real Yield Curve**")
+    rcol1, rcol2, rcol3, rcol4 = st.columns(4)
+    rcol1.metric("5Y Real", f"{real_5y:.2f}%" if real_5y is not None else "N/A")
+    rcol2.metric("10Y Real", f"{real_10y:.2f}%" if real_10y is not None else "N/A")
+    rcol3.metric("20Y Real", f"{real_20y:.2f}%" if real_20y is not None else "N/A")
+    rcol4.metric("30Y Real", f"{real_30y:.2f}%" if real_30y is not None else "N/A")
+
+    st.divider()
+    st.markdown("**Nominal = Real + Breakeven Inflation**")
+    acol1, acol2 = st.columns(2)
+    with acol1:
+        st.write("**5Y**")
+        if real_5y is not None and breakeven_5y is not None:
+            st.write(f"Nominal ≈ {real_5y + breakeven_5y:.2f}% (Real {real_5y:.2f}% + Breakeven {breakeven_5y:.2f}%)")
+        else:
+            st.write("Insufficient data")
+    with acol2:
+        st.write("**10Y**")
+        if real_10y is not None and breakeven_10y is not None:
+            st.write(f"Nominal ≈ {real_10y + breakeven_10y:.2f}% (Real {real_10y:.2f}% + Breakeven {breakeven_10y:.2f}%)")
+        else:
+            st.write("Insufficient data")
+
+    st.divider()
+    st.markdown("**Real Rate Curve Slope (30Y − 5Y)**")
+    if real_30y is not None and real_5y is not None:
+        real_spread = (real_30y - real_5y) * 100
+        slope_label = "Steepening" if real_spread > 0 else "Flattening/Inverted"
+        st.metric("Real 30Y-5Y Spread", f"{real_spread:+.0f} bps", delta=slope_label)
+        st.caption("A steep real curve prices stronger long-run growth expectations net of inflation; a flat/inverted real curve suggests the market sees weaker growth ahead.")
+    else:
+        st.write("Insufficient data for real curve slope")
 
 with tab_history:
     st.subheader("Snapshot History")

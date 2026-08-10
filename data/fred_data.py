@@ -20,7 +20,12 @@ def get_fred_data():
         "CPI": "CPIAUCSL",
         "10Y Breakeven Inflation": "T10YIE",
         "Unemployment Rate": "UNRATE",
-        "Initial Jobless Claims": "ICSA"    
+        "Initial Jobless Claims": "ICSA",
+        "5Y Real Rate": "DFII5",
+        "10Y Real Rate": "DFII10",
+        "20Y Real Rate": "DFII20",
+        "30Y Real Rate": "DFII30",
+        "5Y Breakeven Inflation": "T5YIE"    
 }
     for name, series in indicators.items():
         try:
