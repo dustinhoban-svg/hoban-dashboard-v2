@@ -50,7 +50,7 @@ else:
     spread = None
     curve_label = "Unknown"
 
-save_daily_snapshot(fred_data, vix)
+save_daily_snapshot(fred_data, market)
 
 # --- Sidebar controls ---
 st.sidebar.header("Trend Chart Controls")
