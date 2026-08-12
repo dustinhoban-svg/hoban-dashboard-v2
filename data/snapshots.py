@@ -1,13 +1,16 @@
-import sqlite3
+import psycopg2
 from datetime import date
+from config.settings import DATABASE_URL
 
-DB_PATH = "snapshots.db"
+def get_connection():
+    return psycopg2.connect(DATABASE_URL)
 
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS snapshots (
-            snapshot_date TEXT PRIMARY KEY,
+            snapshot_date DATE PRIMARY KEY,
             fed_funds REAL,
             treasury_10y REAL,
             treasury_2y REAL,
@@ -23,43 +26,50 @@ def init_db():
         )
     """)
     conn.commit()
+    cur.close()
     conn.close()
 
 def save_daily_snapshot(fred_data, vix_value):
-    today = str(date.today())
-    conn = sqlite3.connect(DB_PATH)
-    existing = conn.execute(
-        "SELECT 1 FROM snapshots WHERE snapshot_date = ?", (today,)
-    ).fetchone()
+    today = date.today()
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT 1 FROM snapshots WHERE snapshot_date = %s", (today,))
+    existing = cur.fetchone()
 
     if existing:
+        cur.close()
         conn.close()
         return False  # already saved today
 
-    conn.execute("""
-        INSERT INTO snapshots VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+    def to_float(x):
+        return float(x) if x is not None else None
+
+    cur.execute("""
+        INSERT INTO snapshots VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
     """, (
         today,
-        fred_data.get("Fed Funds Rate"),
-        fred_data.get("10Y Treasury"),
-        fred_data.get("2Y Treasury"),
-        fred_data.get("Fed Balance Sheet"),
-        fred_data.get("Reverse Repo"),
-        fred_data.get("Treasury General Account"),
-        fred_data.get("High Yield Credit Spread"),
-        fred_data.get("CPI"),
-        fred_data.get("10Y Breakeven Inflation"),
-        fred_data.get("Unemployment Rate"),
-        fred_data.get("Initial Jobless Claims"),
-        vix_value
+        to_float(fred_data.get("Fed Funds Rate")),
+        to_float(fred_data.get("10Y Treasury")),
+        to_float(fred_data.get("2Y Treasury")),
+        to_float(fred_data.get("Fed Balance Sheet")),
+        to_float(fred_data.get("Reverse Repo")),
+        to_float(fred_data.get("Treasury General Account")),
+        to_float(fred_data.get("High Yield Credit Spread")),
+        to_float(fred_data.get("CPI")),
+        to_float(fred_data.get("10Y Breakeven Inflation")),
+        to_float(fred_data.get("Unemployment Rate")),
+        to_float(fred_data.get("Initial Jobless Claims")),
+        to_float(vix_value)
     ))
     conn.commit()
+    cur.close()
     conn.close()
     return True
 
 def load_snapshot_history():
     import pandas as pd
-    conn = sqlite3.connect(DB_PATH)
+    conn = get_connection()
     df = pd.read_sql_query("SELECT * FROM snapshots ORDER BY snapshot_date", conn)
     conn.close()
     return df
